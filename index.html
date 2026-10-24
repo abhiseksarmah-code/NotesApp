@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Margin</title>
+<meta name="description" content="A quiet place for notes and to-dos that syncs between your devices.">
+<meta name="theme-color" content="#EEF1EF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#161B1A" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-view="notes" data-pane="list">
+<div class="app">
+  <aside class="side">
+    <div class="head">
+      <div class="brand">Margin<i>.</i></div>
+      <button class="sync" id="sync" data-s="local">This device</button>
+    </div>
+    <div class="seg" role="tablist" aria-label="Section">
+      <button role="tab" id="tab-notes" aria-selected="true">Notes <span class="n" id="cn">0</span></button>
+      <button role="tab" id="tab-tasks" aria-selected="false">Tasks <span class="n" id="ct">0</span></button>
+    </div>
+    <div class="notes-side">
+      <div class="tools">
+        <input class="search" id="q" type="search" placeholder="Search notes" autocomplete="off">
+        <button class="new" id="new" aria-label="New note" title="New note (Ctrl+Alt+N)">+</button>
+      </div>
+      <ul class="list" id="list"></ul>
+    </div>
+    <div class="task-side" id="tsum"></div>
+    <div class="foot">
+      <span id="foot-msg">Saved on this device.</span>
+      <button class="link" id="install" hidden>Install app</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <section class="ed" id="ed">
+      <div class="edbar">
+        <button class="ghost back" id="back">← Notes</button>
+        <span class="meta" id="meta"></span>
+        <button class="ghost del" id="del" hidden>Delete</button>
+      </div>
+      <div class="blank" id="blank">
+        <div><p>Nothing open.</p><button class="cta" id="new2">New note</button></div>
+      </div>
+      <input class="ttl" id="ttl" placeholder="Title" autocomplete="off" hidden>
+      <textarea class="body" id="body" placeholder="Start writing…" hidden></textarea>
+    </section>
+
+    <section class="tasks" id="tasks">
+      <h1>Tasks</h1>
+      <p class="sub" id="tsub"></p>
+      <form class="add" id="addf">
+        <span class="plus" aria-hidden="true"></span>
+        <input id="addi" placeholder="Add a task and press Enter" autocomplete="off" enterkeyhint="done">
+      </form>
+      <ul class="tl" id="open"></ul>
+      <div class="donehead" id="dh" hidden><span id="dhl">Completed</span><button id="clear">Clear completed</button></div>
+      <ul class="tl" id="done"></ul>
+    </section>
+  </main>
+</div>
+
+<dialog class="sheet" id="sheet">
+  <button class="close" id="sheet-x" aria-label="Close">×</button>
+
+  <form class="sheet-in" id="auth-form" novalidate>
+    <h2 id="auth-h">Sync your notes</h2>
+    <p id="auth-p">Sign in with the same email on your PC and your phone. Everything stays in step, even offline.</p>
+    <label class="field">Email<input id="email" type="email" autocomplete="email" required></label>
+    <label class="field">Password<input id="pw" type="password" autocomplete="current-password" minlength="6" required></label>
+    <div class="err" id="auth-err" role="alert"></div>
+    <button class="cta" id="auth-go" type="submit">Sign in</button>
+    <div class="row">
+      <button class="link" id="auth-toggle" type="button">New here? Create an account</button>
+      <button class="link" id="auth-reset" type="button">Forgot password?</button>
+    </div>
+  </form>
+
+  <div class="sheet-in" id="acct" hidden>
+    <h2>Synced</h2>
+    <p>Signed in as <span class="who" id="who"></span>. Notes and tasks sync to every device where you sign in with this email.</p>
+    <div class="row"><button class="cta" id="signout">Sign out</button></div>
+  </div>
+
+  <div class="sheet-in" id="nosync" hidden>
+    <h2>Sync isn’t set up yet</h2>
+    <p>Your notes are saved on this device. To sync between your PC and phone, add your Firebase project details to <b>firebase-config.js</b>. The README walks through it in about five minutes.</p>
+  </div>
+</dialog>
+
+<div class="toast" id="toast" role="status"><span id="tmsg"></span><button id="tact" hidden>Undo</button></div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
