@@ -1,0 +1,56 @@
+name: Build Android app
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'android/**'
+      - '.github/workflows/android.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Create a signing key for this build
+        run: |
+          PASS=$(openssl rand -hex 16)
+          echo "::add-mask::$PASS"
+          keytool -genkeypair -keystore "$RUNNER_TEMP/margin.jks" -alias margin -keyalg RSA -keysize 2048 \
+            -validity 10000 -storepass "$PASS" -keypass "$PASS" -dname "CN=Margin by Abhisek" -noprompt
+          echo "MARGIN_KS_PASS=$PASS" >> "$GITHUB_ENV"
+          echo "MARGIN_KEYSTORE=$RUNNER_TEMP/margin.jks" >> "$GITHUB_ENV"
+
+      - name: Build the APK
+        working-directory: android
+        run: gradle assembleRelease --no-daemon --stacktrace
+
+      - name: Name the APK
+        run: cp android/app/build/outputs/apk/release/app-release.apk Margin-by-Abhisek.apk
+
+      - name: Publish as a release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: android-build-${{ github.run_number }}
+          name: Margin. by Abhisek for Android (build ${{ github.run_number }})
+          make_latest: true
+          files: Margin-by-Abhisek.apk
+          body: |
+            Install on your phone: download **Margin-by-Abhisek.apk** below, open it, and allow installing from your browser if Android asks.
+
+            The app opens your Margin page on Claude, so it shows the same notes, tasks and To buy list as your PC and stays in sync.
+            Sign in with **Continue with email** (Google sign-in doesn't work inside apps).

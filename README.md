@@ -51,6 +51,16 @@ Each account's items live at `users/{uid}/items/{id}` in Firestore. Writes are d
 | `firestore.rules` | Security rules to paste into Firebase |
 | `sw.js`, `manifest.webmanifest`, `icons/` | Offline support and app install |
 
+## Android app
+
+`android/` holds a small Android app that opens the Margin page on Claude full-screen, so the phone shows the same notes, tasks and To buy list as the PC and stays in sync through the Claude account. Every push that changes `android/` builds a new APK with GitHub Actions and attaches it to a release:
+
+**https://github.com/abhiseksarmah-code/NotesApp/releases/latest** → download `Margin-by-Abhisek.apk` on the phone and open it.
+
+- Sign in with **Continue with email**; Google sign-in is blocked inside apps. If Claude emails a link, copy it and tap **Paste sign-in link**.
+- Links to other sites open in the phone's browser.
+- Each build is signed with a new key, so installing a newer build means uninstalling the old one first (and signing in again). New Margin features don't need a new build: they come from the page.
+
 ## Run locally
 
 Any static server works:

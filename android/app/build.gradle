@@ -1,0 +1,38 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.abhisek.margin'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'com.abhisek.margin'
+        minSdk 26
+        targetSdk 34
+        versionCode 1
+        versionName '1.0'
+    }
+
+    // The signing key is created fresh by the GitHub workflow for each build (see .github/workflows/android.yml).
+    signingConfigs {
+        release {
+            storeFile file(System.getenv('MARGIN_KEYSTORE') ?: 'missing-keystore.jks')
+            storePassword System.getenv('MARGIN_KS_PASS')
+            keyAlias 'margin'
+            keyPassword System.getenv('MARGIN_KS_PASS')
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}

@@ -1,8 +1,7 @@
 name: Deploy to GitHub Pages
 
 on:
-  push:
-    branches: [main]
+  # Run by hand once GitHub Pages is switched on (Settings > Pages > Source: GitHub Actions).
   workflow_dispatch:
 
 permissions:
